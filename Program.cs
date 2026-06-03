@@ -1,10 +1,14 @@
-using Blazor_Auth_State_Service.Components;
+using Greeting_App.Components;
+using Greeting_App.Services; // Ensure the correct namespace is imported
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services for Server-Side rendering and Interactivity
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// 2. Register the AuthenticationStateService as a Singleton
+builder.Services.AddSingleton<AuthenticationStateService>();
 
 var app = builder.Build();
 
