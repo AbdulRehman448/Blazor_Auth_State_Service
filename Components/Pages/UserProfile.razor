@@ -1,0 +1,40 @@
+﻿@using Greeting_App.Services
+@inject AuthenticationStateService AuthService
+@implements IDisposable
+
+<div class="profile-display-zone">
+    @if (AuthService.IsAuthenticated)
+    {
+        <div class="profile-card authenticated animate-fade-in">
+            <div class="profile-avatar">👨‍💻</div>
+            <div class="profile-details">
+                <h3>Welcome Back, Premium User!</h3>
+                <p>Identity Token status validated on server. You have secure operational access to all workspace repositories.</p>
+                <span class="meta-tag">Role: Administrator</span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="profile-card unauthenticated animate-fade-in">
+            <div class="profile-avatar warning">🛑</div>
+            <div class="profile-details">
+                <h3>Access Token Missing</h3>
+                <p>Anonymous user instance detected. Please use the Authentication Control Tower block to establish credentials.</p>
+                <span class="meta-tag alert">Status: Restrictive Access</span>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        AuthService.OnStateChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        AuthService.OnStateChange -= StateHasChanged;
+    }
+}

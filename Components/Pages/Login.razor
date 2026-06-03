@@ -1,0 +1,42 @@
+﻿@using Greeting_App.Services
+@inject AuthenticationStateService AuthService
+@implements IDisposable
+
+<div class="auth-control-box">
+    <h4>Authentication Control Tower</h4>
+    <p class="status-indicator-text">
+        Current Gateway Status:
+        <span class="badge @(AuthService.IsAuthenticated ? "authenticated" : "guest")">
+            @(AuthService.IsAuthenticated ? "Active Session" : "Logged Out")
+        </span>
+    </p>
+
+    <div class="btn-group">
+        @if (!AuthService.IsAuthenticated)
+        {
+            <button class="btn btn-login" @onclick="AuthService.LogIn">
+                <span class="btn-icon">🔐</span> Establish Secure Connection
+            </button>
+        }
+        else
+        {
+            <button class="btn btn-logout" @onclick="AuthService.LogOut">
+                <span class="btn-icon">🔓</span> Terminate Active Session
+            </button>
+        }
+    </div>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        // Subscribe component re-rendering to the service event stream
+        AuthService.OnStateChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        // Unsubscribe to protect against memory leak vectors
+        AuthService.OnStateChange -= StateHasChanged;
+    }
+}

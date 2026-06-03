@@ -1,7 +1,350 @@
 ﻿@page "/"
+@layout NullLayout
+@using Microsoft.AspNetCore.Components.Web
+@rendermode InteractiveServer
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Auth State App</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="app-wrapper">
+    <header class="top-navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <span class="brand-icon">🛡️</span>
+                <span class="brand-text">Auth State App</span>
+            </div>
+            <nav class="navbar-links">
+                <a href="" class="nav-link active">Home</a>
+            </nav>
+        </div>
+    </header>
 
-Welcome to your new app.
+    <main class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Task 5: Singleton State Management</h2>
+                <p class="subtitle">Cross-component state synchronized using reactive memory infrastructure event observers</p>
+            </div>
+
+            <div class="card-body grid-layout">
+                <div class="grid-column">
+                    <Login />
+                </div>
+
+                <div class="grid-column">
+                    <UserProfile />
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <p class="developer-credit">Developed by <span class="dev-name">Abdul Rehman Ali</span></p>
+            <p class="assignment-info">VP Lab Work &bull; Assignment 4 &bull; Task 5</p>
+        </div>
+    </footer>
+</div>
+
+@code {
+    private class NullLayout : LayoutComponentBase
+    {
+        protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder)
+        {
+            builder.AddContent(0, Body);
+        }
+    }
+}
+
+<style>
+    /* Global Layout Setup */
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background-color: #fffbeb !important; /* Soft Warm Amber Tone backdrop */
+        color: #1e293b;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        height: 100%;
+    }
+
+    .app-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    /* Premium Header (Pushed to Edges) */
+    .top-navbar {
+        background: #ffffff;
+        border-bottom: 1px solid #fde68a;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .navbar-container {
+        width: 100%;
+        padding: 0.75rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .brand-icon {
+        font-size: 1.5rem;
+    }
+
+    .brand-text {
+        font-size: 1.3rem;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        background: linear-gradient(135deg, #d97706, #ea580c); /* Amber to Warm Orange Sunset */
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .navbar-links .nav-link {
+        color: #d97706;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        background-color: rgba(217, 119, 6, 0.06);
+        transition: all 0.2s;
+    }
+
+    .navbar-links .nav-link:hover {
+        background-color: rgba(217, 119, 6, 0.12);
+    }
+
+    /* Content Layout Card */
+    .container {
+        flex: 1 0 auto;
+        width: 100%;
+        max-width: 900px;
+        margin: 4rem auto;
+        padding: 0 1rem;
+        box-sizing: border-box;
+    }
+
+    .card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.05), 0 8px 10px -6px rgba(217, 119, 6, 0.05);
+        border: 1px solid #fef3c7;
+        overflow: hidden;
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #d97706, #ea580c);
+        color: white;
+        padding: 2.25rem 2rem;
+    }
+
+    .card-header h2 {
+        margin: 0;
+        font-size: 1.65rem;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+    }
+
+    .subtitle {
+        margin: 0.5rem 0 0 0;
+        opacity: 0.95;
+        font-size: 0.95rem;
+    }
+
+    .card-body {
+        padding: 2.5rem 2rem;
+    }
+
+    /* Side-by-side Dashboard Split Grid layout configuration */
+    .grid-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+        .grid-layout {
+            grid-template-columns: 1fr 1.2fr;
+        }
+    }
+
+    .grid-column {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Cross Component Embedded Layout Styles Block overrides */
+    .auth-control-box {
+        background-color: #fffdf5;
+        border: 1px solid #fde68a;
+        border-radius: 12px;
+        padding: 1.5rem;
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .auth-control-box h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+        color: #78350f;
+    }
+
+    .status-indicator-text {
+        font-size: 0.9rem;
+        color: #4b5563;
+        margin: 0 0 1.5rem 0;
+    }
+
+    .badge {
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+    }
+
+    .badge.guest { background-color: #fee2e2; color: #ef4444; }
+    .badge.authenticated { background-color: #dcfce7; color: #16a34a; }
+
+    .btn {
+        width: 100%;
+        padding: 0.85rem 1.25rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: background-color 0.15s;
+    }
+
+    .btn-login { background-color: #d97706; color: white; }
+    .btn-login:hover { background-color: #b45309; }
+
+    .btn-logout { background-color: #1e293b; color: white; }
+    .btn-logout:hover { background-color: #0f172a; }
+
+    /* Right Profile Monitoring Section elements */
+    .profile-display-zone {
+        height: 100%;
+    }
+
+    .profile-card {
+        border-radius: 12px;
+        padding: 1.5rem;
+        display: flex;
+        gap: 1.25rem;
+        height: 100%;
+        box-sizing: border-box;
+        border: 1px solid #e2e8f0;
+    }
+
+    .profile-card.authenticated {
+        background-color: #f0fdf4;
+        border-color: #bbf7d0;
+    }
+
+    .profile-card.unauthenticated {
+        background-color: #fafafa;
+        border-color: #e5e7eb;
+    }
+
+    .profile-avatar {
+        font-size: 2.5rem;
+        background: white;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .profile-details h3 {
+        margin: 0 0 0.35rem 0;
+        font-size: 1.15rem;
+        color: #1e293b;
+    }
+
+    .profile-details p {
+        margin: 0 0 1rem 0;
+        font-size: 0.875rem;
+        color: #475569;
+        line-height: 1.5;
+    }
+
+    .meta-tag {
+        font-size: 0.75rem;
+        font-weight: 600;
+        background-color: #e2e8f0;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        color: #475569;
+    }
+
+    .meta-tag.alert { background-color: #f3f4f6; color: #9ca3b8; }
+
+    /* Sticky Footer Custom Elements */
+    .app-footer {
+        flex-shrink: 0;
+        background-color: #ffffff;
+        border-top: 1px solid #fde68a;
+        padding: 1.5rem 2rem;
+        text-align: center;
+        margin-top: auto;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .footer-content {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .developer-credit {
+        margin: 0;
+        font-size: 0.95rem;
+        color: #78350f;
+        font-weight: 500;
+    }
+
+    .dev-name {
+        color: #1e293b;
+        font-weight: 700;
+    }
+
+    .assignment-info {
+        margin: 0.35rem 0 0 0;
+        font-size: 0.8rem;
+        color: #b45309;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.25s ease-out forwards;
+    }
+
+    /* Fixed double escaping to avoid compiler variable execution blocks */
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.99); }
+        to { opacity: 1; transform: scale(1); }
+    }
+</style>
