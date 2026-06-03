@@ -1,4 +1,4 @@
-using Greeting_App.Components;
+using Blazor_Auth_State_Service.Components;
 using Greeting_App.Services; // Ensure the correct namespace is imported
 
 var builder = WebApplication.CreateBuilder(args);
